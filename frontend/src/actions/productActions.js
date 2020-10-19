@@ -1,10 +1,9 @@
-const { PRODUCT_LIST_REQUEST } = require('./types');
-
 import {
 	PRODUCT_LIST_SUCCESS,
 	PRODUCT_LIST_REQUEST,
 	PRODUCT_LIST_FAILED
 } from './types';
+import axios from 'axios';
 
 export const listProducts = () => async dispatch => {
 	try {
