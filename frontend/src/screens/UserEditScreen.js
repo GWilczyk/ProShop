@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, userUpdate } from '../actions/userActions';
+import { USER_UPDATE_RESET } from '../actions/types';
 
 const UserEditScreen = ({ history, match }) => {
 	const [name, setName] = useState('');
@@ -15,20 +16,33 @@ const UserEditScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
 	const userId = match.params.id;
 
-	const { loading, error, user } = useSelector(state => state.userDetails);
+	const { loading: loadingDetails, error: errorDetails, user } = useSelector(
+		state => state.userDetails
+	);
+	const {
+		loading: loadingUserUpdate,
+		error: errorUserUpdate,
+		success: successUserUpdate
+	} = useSelector(state => state.userUpdate);
 
 	useEffect(() => {
-		if (!user.name || user._id !== userId) {
-			dispatch(getUserDetails(userId));
+		if (successUserUpdate) {
+			dispatch({ type: USER_UPDATE_RESET });
+			history.push('/admin/userlist');
 		} else {
-			setName(user.name);
-			setEmail(user.email);
-			setIsAdmin(user.isAdmin);
+			if (!user.name || user._id !== userId) {
+				dispatch(getUserDetails(userId));
+			} else {
+				setName(user.name);
+				setEmail(user.email);
+				setIsAdmin(user.isAdmin);
+			}
 		}
-	}, [dispatch, user, userId]);
+	}, [dispatch, history, successUserUpdate, user, userId]);
 
 	const submitHandler = event => {
 		event.preventDefault();
+		dispatch(userUpdate({ _id: userId, name, email, isAdmin }));
 	};
 
 	return (
@@ -39,10 +53,14 @@ const UserEditScreen = ({ history, match }) => {
 
 			<FormContainer>
 				<h1>Edit User</h1>
-				{loading ? (
+				{loadingUserUpdate && <Loader />}
+				{errorUserUpdate && (
+					<Message variant='danger'>{errorUserUpdate}</Message>
+				)}
+				{loadingDetails ? (
 					<Loader />
-				) : error ? (
-					<Message variant='danger'>{error}</Message>
+				) : errorDetails ? (
+					<Message variant='danger'>{errorDetails}</Message>
 				) : (
 					<Form onSubmit={submitHandler}>
 						<Form.Group controlId='name'>
