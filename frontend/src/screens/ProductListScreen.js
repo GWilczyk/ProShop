@@ -15,17 +15,20 @@ const ProductListScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
 
 	const { loading, error, products } = useSelector(state => state.productList);
+
 	const {
 		loading: loadingDelete,
 		error: errorDelete,
 		success: successDelete
 	} = useSelector(state => state.productDelete);
+
 	const {
 		loading: loadingCreate,
 		error: errorCreate,
 		success: successCreate,
 		product: productCreate
 	} = useSelector(state => state.productCreate);
+
 	const { userInfo } = useSelector(state => state.userLogin);
 
 	useEffect(() => {
