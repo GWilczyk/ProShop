@@ -4,7 +4,12 @@ import { Button, Table, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { deleteProduct, listProducts } from '../actions/productActions';
+import {
+	createProduct,
+	deleteProduct,
+	listProducts
+} from '../actions/productActions';
+import { PRODUCT_CREATE_RESET } from '../actions/productTypes';
 
 const ProductListScreen = ({ history, match }) => {
 	const dispatch = useDispatch();
@@ -15,18 +20,37 @@ const ProductListScreen = ({ history, match }) => {
 		error: errorDelete,
 		success: successDelete
 	} = useSelector(state => state.productDelete);
+	const {
+		loading: loadingCreate,
+		error: errorCreate,
+		success: successCreate,
+		product: productCreate
+	} = useSelector(state => state.productCreate);
 	const { userInfo } = useSelector(state => state.userLogin);
 
 	useEffect(() => {
-		if (userInfo && userInfo.isAdmin) {
-			dispatch(listProducts());
-		} else {
+		dispatch({ type: PRODUCT_CREATE_RESET });
+
+		if (!userInfo.isAdmin) {
 			history.push('/login');
 		}
-	}, [dispatch, history, userInfo, successDelete]);
 
-	const createProductHandler = product => {
-		console.log('Product creation');
+		if (successCreate) {
+			history.push(`/admin/product/${productCreate._id}/edit`);
+		} else {
+			dispatch(listProducts());
+		}
+	}, [
+		dispatch,
+		history,
+		userInfo,
+		successDelete,
+		successCreate,
+		productCreate
+	]);
+
+	const createProductHandler = () => {
+		dispatch(createProduct());
 	};
 
 	const deleteProductHandler = id => {
@@ -47,8 +71,13 @@ const ProductListScreen = ({ history, match }) => {
 					</Button>
 				</Col>
 			</Row>
+
 			{loadingDelete && <Loader />}
 			{errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+
+			{loadingCreate && <Loader />}
+			{errorCreate && <Message variant='danger'>{errorCreate}</Message>}
+
 			{loading ? (
 				<Loader />
 			) : error ? (
