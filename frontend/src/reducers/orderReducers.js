@@ -13,7 +13,7 @@ import {
 	ORDER_LIST_MY_SUCCESS,
 	ORDER_LIST_MY_FAILED,
 	ORDER_LIST_MY_RESET
-} from '../actions/types';
+} from '../actions/orderTypes';
 
 export const orderCreateReducer = (state = {}, action) => {
 	switch (action.type) {

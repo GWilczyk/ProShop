@@ -11,7 +11,7 @@ import {
 	ORDER_LIST_MY_REQUEST,
 	ORDER_LIST_MY_SUCCESS,
 	ORDER_LIST_MY_FAILED
-} from '../actions/types';
+} from './orderTypes';
 import axios from 'axios';
 
 export const createOrder = order => async (dispatch, getState) => {

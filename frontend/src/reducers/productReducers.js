@@ -5,7 +5,7 @@ import {
 	PRODUCT_DETAILS_REQUEST,
 	PRODUCT_DETAILS_SUCCESS,
 	PRODUCT_DETAILS_FAILED
-} from '../actions/types';
+} from '../actions/productTypes';
 
 export const productListReducer = (state = { products: [] }, action) => {
 	switch (action.type) {

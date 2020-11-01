@@ -3,7 +3,7 @@ import {
 	CART_REMOVE_ITEM,
 	CART_SAVE_SHIPPING_ADDRESS,
 	CART_SAVE_PAYMENT_METHOD
-} from '../actions/types';
+} from '../actions/cartTypes';
 
 export const cartReducer = (
 	state = { cartItems: [], shippingAddress: {} },

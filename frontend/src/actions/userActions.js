@@ -14,7 +14,6 @@ import {
 	USER_UPDATE_PROFILE_REQUEST,
 	USER_UPDATE_PROFILE_SUCCESS,
 	USER_UPDATE_PROFILE_FAILED,
-	ORDER_LIST_MY_RESET,
 	USER_LIST_REQUEST,
 	USER_LIST_SUCCESS,
 	USER_LIST_FAILED,
@@ -25,7 +24,8 @@ import {
 	USER_UPDATE_REQUEST,
 	USER_UPDATE_SUCCESS,
 	USER_UPDATE_FAILED
-} from './types';
+} from './userTypes';
+import { ORDER_LIST_MY_RESET } from './orderTypes';
 
 export const login = (email, password) => async dispatch => {
 	try {

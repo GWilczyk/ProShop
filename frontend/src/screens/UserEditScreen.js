@@ -6,7 +6,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { getUserDetails, userUpdate } from '../actions/userActions';
-import { USER_UPDATE_RESET } from '../actions/types';
+import { USER_UPDATE_RESET } from '../actions/userTypes';
 
 const UserEditScreen = ({ history, match }) => {
 	const [name, setName] = useState('');

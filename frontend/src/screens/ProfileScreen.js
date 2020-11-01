@@ -6,7 +6,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails, userUpdateProfile } from '../actions/userActions';
 import { listMyOrders } from '../actions/orderActions';
-import { USER_UPDATE_PROFILE_RESET } from '../actions/types';
+import { USER_UPDATE_PROFILE_RESET } from '../actions/userTypes';
 
 const ProfileScreen = ({ history }) => {
 	const [name, setName] = useState('');

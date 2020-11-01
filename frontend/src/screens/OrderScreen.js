@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getOrderDetails, payOrder } from '../actions/orderActions';
-import { ORDER_PAY_RESET } from '../actions/types';
+import { ORDER_PAY_RESET } from '../actions/orderTypes';
 
 const OrderScreen = ({ match }) => {
 	const orderId = match.params.id;
