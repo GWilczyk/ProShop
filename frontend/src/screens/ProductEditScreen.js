@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
-import { productDetails } from '../actions/productActions';
+import { productDetails, productUpdate } from '../actions/productActions';
+import { PRODUCT_UPDATE_RESET } from '../actions/productTypes';
 
 const ProductEditScreen = ({ history, match }) => {
 	const [name, setName] = useState('');
@@ -23,23 +24,45 @@ const ProductEditScreen = ({ history, match }) => {
 		state => state.productDetails
 	);
 
+	const {
+		loading: loadingUpdate,
+		error: errorUpdate,
+		success: successUpdate
+	} = useSelector(state => state.productUpdate);
+
 	useEffect(() => {
-		if (!product.name || product._id !== productId) {
-			dispatch(productDetails(productId));
+		if (successUpdate) {
+			dispatch({ type: PRODUCT_UPDATE_RESET });
+			history.push('/admin/productlist');
 		} else {
-			setName(product.name);
-			setPrice(product.price);
-			setImage(product.image);
-			setBrand(product.brand);
-			setCategory(product.category);
-			setCountInStock(product.countInStock);
-			setDescription(product.description);
+			if (!product.name || product._id !== productId) {
+				dispatch(productDetails(productId));
+			} else {
+				setName(product.name);
+				setPrice(product.price);
+				setImage(product.image);
+				setBrand(product.brand);
+				setCategory(product.category);
+				setCountInStock(product.countInStock);
+				setDescription(product.description);
+			}
 		}
-	}, [dispatch, history, product, productId]);
+	}, [dispatch, history, product, productId, successUpdate]);
 
 	const submitHandler = event => {
 		event.preventDefault();
-		// UPDATE PRODUCT
+		dispatch(
+			productUpdate({
+				_id: productId,
+				name,
+				price,
+				image,
+				brand,
+				category,
+				description,
+				countInStock
+			})
+		);
 		history.push(`/admin/product/${product._id}/edit`);
 	};
 
@@ -51,7 +74,8 @@ const ProductEditScreen = ({ history, match }) => {
 
 			<FormContainer>
 				<h1>Edit Product</h1>
-
+				{loadingUpdate && <Loader />}
+				{errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
 				{loadingDetails ? (
 					<Loader />
 				) : errorDetails ? (
@@ -83,7 +107,7 @@ const ProductEditScreen = ({ history, match }) => {
 								type='text'
 								placeholder='Enter image URL'
 								value={image}
-								onChange={event => setImage(event.target.checked)}
+								onChange={event => setImage(event.target.value)}
 							></Form.Control>
 						</Form.Group>
 
@@ -92,7 +116,7 @@ const ProductEditScreen = ({ history, match }) => {
 								type='text'
 								placeholder='Enter brand'
 								value={brand}
-								onChange={event => setBrand(event.target.checked)}
+								onChange={event => setBrand(event.target.value)}
 							></Form.Control>
 						</Form.Group>
 
